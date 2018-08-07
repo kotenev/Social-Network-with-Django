@@ -16,21 +16,23 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
-            return reverse('shop:teacher_list_by_category',
+            return reverse('shop:product_list_by_category',
                            args=[self.slug])
 
 
-class Teacher(models.Model):
+class Product(models.Model):
     category = models.ForeignKey(Category,
-                                 related_name='Teacher',
+                                 related_name='products',
                                  on_delete=models.CASCADE)
     name = models.CharField(max_length=200, db_index=True)
     slug = models.SlugField(max_length=200, db_index=True)
-    image = models.ImageField(upload_to='teacher/%Y/%m/%d',
+    image = models.ImageField(upload_to='products/%Y/%m/%d',
                               blank=True)
     description = models.TextField(blank=True)
-    rate = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     available = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ('name',)
@@ -40,5 +42,5 @@ class Teacher(models.Model):
         return self.name
 
     def get_absolute_url(self):
-            return reverse('shop:teacher_detail',
+            return reverse('shop:product_detail',
                            args=[self.id, self.slug])
